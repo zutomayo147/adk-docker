@@ -7,6 +7,10 @@ from app.agents.technical_analysis import get_technical_analysis_agent
 from app.agents.economic_sentiment import get_economic_sentiment_agent
 from app.agents.chief_predictor import get_chief_predictor_agent
 from google_adk import Session
+from app.auth import setup_google_credentials
+
+# Initialize Google Cloud Credentials
+setup_google_credentials()
 
 app = FastAPI(title="ADK Docker Backend API")
 
