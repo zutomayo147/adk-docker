@@ -1,0 +1,33 @@
+import requests
+from bs4 import BeautifulSoup
+from google_adk import Agent, Session, Tool
+
+class NewsSearchTool(Tool):
+    """株価に影響を与えるニュースを検索・取得するツール"""
+    def execute(self, query: str = "日経平均 株価 ニュース"):
+        # 簡易的なニュースサイトスクレイピング (例としてYahoo ニュース等の見出し)
+        url = f"https://news.yahoo.co.jp/search?p={query}&ei=utf-8"
+        headers = {"User-Agent": "Mozilla/5.0"}
+        
+        try:
+            response = requests.get(url, headers=headers)
+            soup = BeautifulSoup(response.text, 'html.parser')
+            news_items = []
+            for item in soup.select('.sc-dlfmzB.sc-iLVFrd.bCebVj.jZcghl.newsFeed_item_link')[:5]:
+                title = item.select_one('.sc-jHOnlo.iUjGNo.newsFeed_item_title').text
+                news_items.append(title)
+            
+            if not news_items:
+                return "現在、特筆すべきニュースは見つかりませんでした。"
+            return news_items
+        except Exception as e:
+            return f"ニュース取得中にエラーが発生しました: {str(e)}"
+
+def get_news_analysis_agent():
+    return Agent(
+        name="NewsAnalysisAgent",
+        instructions="""あなたはプロの金融ニュースアナリストです。
+最新のニュース見出しを収集し、それが日経平均株価に対してポジティブ（強気）かネガティブ（弱気）かを分析してください。
+ニュースの内容から市場のセンチメントを読み解き報告してください。""",
+        tools=[NewsSearchTool()]
+    )
