@@ -1,6 +1,6 @@
 import yfinance as ticker
 import pandas as pd
-from google.adk import Agent, Runner
+from google.adk import Agent
 from google.adk.tools import BaseTool
 
 class TechnicalAnalysisTool(BaseTool):

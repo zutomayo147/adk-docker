@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from google.adk import Agent, Runner
+from google.adk import Agent
 from google.adk.tools import BaseTool
 
 class NewsSearchTool(BaseTool):

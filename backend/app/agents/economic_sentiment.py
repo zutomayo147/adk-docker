@@ -1,4 +1,4 @@
-from google.adk import Agent, Runner
+from google.adk import Agent
 
 def get_economic_sentiment_agent():
     return Agent(

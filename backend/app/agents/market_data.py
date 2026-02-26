@@ -1,5 +1,5 @@
 import yfinance as ticker
-from google.adk import Agent, Runner
+from google.adk import Agent
 from google.adk.tools import BaseTool
 
 class MarketDataTool(BaseTool):
