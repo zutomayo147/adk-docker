@@ -1,6 +1,7 @@
 # ADK Docker Starter
 
-Python (FastAPI) と React (Vite + Tailwind CSS) が動作する、最小限の Docker Compose 開発環境です。
+Python (FastAPI) と React (Vite + Tailwind CSS) が動作する、AI エージェント開発用の Docker Compose 環境です。
+最新のアップデートにより、**Deep Research AI** 風のプレミアムな Web UI が搭載されました。
 
 ## 🚀 起動方法
 
@@ -15,13 +16,13 @@ Python (FastAPI) と React (Vite + Tailwind CSS) が動作する、最小限の 
    docker compose up -d
    ```
 2. ブラウザで以下にアクセスします：
-   - **フロントエンド**: [http://localhost:3000](http://localhost:3000)
+   - **フロントエンド (Deep Research UI)**: [http://localhost:3000](http://localhost:3000)
    - **バックエンド API**: [http://localhost:8000](http://localhost:8000)
    - **API ドキュメント (Swagger)**: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ### 💻 CLI 実行方法
 
-WebUIを経由せずに、バックエンドコンテナ内でエージェントを直接実行することができます。
+WebUI を経由せずに、バックエンドコンテナ内でエージェントを直接実行することができます。
 
 ```bash
 docker compose exec backend python -m cli_run
@@ -35,21 +36,32 @@ docker compose exec backend python -m cli_run --prompt "明日の日経平均の
 
 ---
 
+## ✨ 最新の Web UI 機能
+
+スクリーンショットを参考に、高機能かつプレミアムなリサーチダッシュボードを実装しました。
+
+- **Thinking Process**: AI の思考ステップをリアルタイム（模倣）で視覚化
+- **Project Context**: 関連スニペット、マーケットセンチメント、ライブ引用の表示
+- **Responsive Layout**: サイドバー、メインコンテンツ、コンテキストパネルの 3 カラム構成
+- **Dark Theme**: ガラスモーフィズムと洗練されたアニメーションを採用
+
+---
+
 ## 🛠 技術構成
 
 ### バックエンド
 
-- **言語/フレームワーク**: Python 3.12 / FastAPI
+- **言語/フレームワーク**: Python 3.12 / FastAPI / [google-adk](https://github.com/google-gemini/google-adk)
 - **バリデーション**: Pydantic
 - **ポート**: 8000 (固定)
-- **特徴**: Pydantic モデルによる厳密な型定義、ホットリロード対応。
+- **特徴**: ADK エージェントによる推論、ストリーミングログ、Pydantic モデルによる厳密な型定義。
 
 ### フロントエンド
 
 - **言語/フレームワーク**: TypeScript / React (Vite)
-- **スタイリング**: Tailwind CSS
+- **スタイリング**: Tailwind CSS 4.0
 - **ポート**: 3000 (固定)
-- **特徴**: バックエンドとの疎通確認済み、モダンなダークテーマUI。
+- **特徴**: プレミアムな「Deep Research AI」風 UI、コンポーネント指向設計。
 
 ---
 
@@ -57,22 +69,24 @@ docker compose exec backend python -m cli_run --prompt "明日の日経平均の
 
 ```text
 .
-├── backend/            # バックエンド (FastAPI)
-│   ├── app/            # アプリケーションロジック
+├── backend/            # バックエンド (FastAPI + ADK Agents)
+│   ├── app/            # アプリケーションロジック・エージェント定義
+│   ├── cli_run.py      # CLI 実行スクリプト
 │   ├── Dockerfile
 │   └── requirements.txt
 ├── frontend/           # フロントエンド (React)
-│   ├── src/            # ソースコード
+│   ├── src/            # デザイン済みコンポーネント (Sidebar, Navbar, etc.)
 │   ├── Dockerfile
 │   └── vite.config.ts
 ├── docker-compose.yml  # コンテナ統合管理
-└── .env               # 環境変数
+└── .env               # 環境変数 (UPPER_SNAKE_CASE)
 ```
 
 ---
 
 ## 📝 開発ルール
 
-- ポート番号 (3000/8000) は変更しないでください。
-- バックエンドの API 更新時は `backend/app/schemas.py` の Pydantic モデルを更新してください。
-- フロントエンドのスタイリングは Tailwind CSS を優先してください。
+- ポート番号 (3000/8000) は絶対に変更しないでください。
+- バックエンドの API 更新時は Pydantic モデルを定義し、dict での扱いは避けてください。
+- スタイリングは Tailwind CSS を優先し、CSS の重複定義は避けてください。
+- AI コンテキスト制御のため、`.geminiignore` を活用しています。
