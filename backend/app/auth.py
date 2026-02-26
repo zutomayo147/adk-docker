@@ -7,26 +7,30 @@ def setup_google_credentials() -> Optional[str]:
     """
     環境変数からサービスアカウント情報を読み込み、GOOGLE_APPLICATION_CREDENTIALS を設定します。
     
-    1. GOOGLE_SERVICE_ACCOUNT_JSON (JSON文字列) があれば、一時ファイルに書き出してそのパスを返します。
-    2. GOOGLE_APPLICATION_CREDENTIALS (ファイルパス) が既にあれば、そのパスを返します。
+    1. GOOGLE_SERVICE_ACCOUNT_JSON が JSON文字列なら、一時ファイルに書き出してそのパスを返します。
+    2. GOOGLE_SERVICE_ACCOUNT_JSON が 既存のファイルパス（絶対・相対）なら、そのパス（絶対パス化）を返します。
+    3. GOOGLE_APPLICATION_CREDENTIALS (ファイルパス) が既にあれば、そのパスを返します。
     """
-    # 1. JSON文字列のチェック
-    service_account_json = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON")
-    if service_account_json:
+    # 1 & 2. GOOGLE_SERVICE_ACCOUNT_JSON のチェック
+    service_account_val = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON")
+    if service_account_val:
+        # まずはJSON文字列として試行
         try:
-            # JSONとして妥当か検証
-            json_data = json.loads(service_account_json)
-            
-            # 一時ファイルの作成 (削除されないように delete=False にするケースもあるが、
-            # プロセス実行中のみ有効であればよい)
+            json_data = json.loads(service_account_val)
             temp_file = tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False)
             json.dump(json_data, temp_file)
             temp_file.close()
-            
             os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = temp_file.name
             return temp_file.name
         except json.JSONDecodeError:
-            print("Error: GOOGLE_SERVICE_ACCOUNT_JSON is not a valid JSON string.")
+            # JSONでない場合は、ファイルパスとして試行
+            # 相対パスの場合は絶対パスに解決
+            full_path = os.path.abspath(service_account_val)
+            if os.path.exists(full_path):
+                os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = full_path
+                return full_path
+            else:
+                print(f"Warning: GOOGLE_SERVICE_ACCOUNT_JSON is neither valid JSON nor an existing path: {service_account_val}")
     
     # 2. 既存のファイルパスのチェック
     credentials_path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
