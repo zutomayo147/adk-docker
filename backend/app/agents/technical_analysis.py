@@ -5,6 +5,12 @@ from google.adk.tools import BaseTool
 
 class TechnicalAnalysisTool(BaseTool):
     """テクニカル指標を計算するツール"""
+    def __init__(self):
+        super().__init__(
+            name="technical_analysis_tool",
+            description="移動平均などのテクニカル指標を計算します。"
+        )
+
     def execute(self, symbol: str = "^N225"):
         data = ticker.download(symbol, period="1mo", interval="1d")
         if len(data) < 20:
@@ -34,8 +40,8 @@ class TechnicalAnalysisTool(BaseTool):
 
 def get_technical_analysis_agent():
     return Agent(
-        name="TechnicalAnalysisAgent",
-        instructions="""あなたは経験豊富なテクニカルアナリストです。
+        model="gemini-2.0-flash-001", name="TechnicalAnalysisAgent",
+        instruction="""あなたは経験豊富なテクニカルアナリストです。
 移動平均線や出来高などのテクニカル指標を分析し、チャートのトレンド（上昇・下降・横ばい）を判断してください。
 投資家の心理状態や過熱感を指標から読み取ってください。""",
         tools=[TechnicalAnalysisTool()]

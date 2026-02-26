@@ -4,6 +4,12 @@ from google.adk.tools import BaseTool
 
 class MarketDataTool(BaseTool):
     """日経平均株価や関連指数のデータを取得するツール"""
+    def __init__(self):
+        super().__init__(
+            name="market_data_tool",
+            description="日経平均株価(^N225)や関連指数のデータを取得します。"
+        )
+
     def execute(self, symbol: str = "^N225"):
         data = ticker.download(symbol, period="5d", interval="1d")
         if data.empty:
@@ -25,8 +31,8 @@ class MarketDataTool(BaseTool):
 
 def get_market_data_agent():
     return Agent(
-        name="MarketDataAgent",
-        instructions="""あなたはプロの市場データアナリストです。
+        model="gemini-2.0-flash-001", name="MarketDataAgent",
+        instruction="""あなたはプロの市場データアナリストです。
 日経平均株価(^N225)、TOPIX、ドル円為替、S&P500などのデータを取得し、
 現在の市場の数値を正確に報告してください。ツールを使用して実際のデータを確認してください。""",
         tools=[MarketDataTool()]

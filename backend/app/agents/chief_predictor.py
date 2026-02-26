@@ -2,8 +2,8 @@ from google.adk import Agent
 
 def get_chief_predictor_agent():
     return Agent(
-        name="ChiefPredictorAgent",
-        instructions="""あなたは投資戦略チームの証券調査部長です。
+        model="gemini-2.0-flash-001", name="ChiefPredictorAgent",
+        instruction="""あなたは投資戦略チームの証券調査部長です。
 部下の4人の専属エージェント（市場データ、ニュース分析、テクニカル分析、経済センチメント）
 からの報告を受け取り、それらを総合して、明日の日経平均株価の予測を策定してください。
 

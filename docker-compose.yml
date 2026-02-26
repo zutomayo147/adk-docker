@@ -8,6 +8,8 @@ services:
       - ./backend:/app
     environment:
       - PYTHONUNBUFFERED=1
+    env_file:
+      - .env
     networks:
       - adk-network
 

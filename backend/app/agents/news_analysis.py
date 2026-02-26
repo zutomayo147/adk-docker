@@ -5,6 +5,12 @@ from google.adk.tools import BaseTool
 
 class NewsSearchTool(BaseTool):
     """株価に影響を与えるニュースを検索・取得するツール"""
+    def __init__(self):
+        super().__init__(
+            name="news_search_tool",
+            description="株価に影響を与えるニュースを検索・取得します。"
+        )
+
     def execute(self, query: str = "日経平均 株価 ニュース"):
         # 簡易的なニュースサイトスクレイピング (例としてYahoo ニュース等の見出し)
         url = f"https://news.yahoo.co.jp/search?p={query}&ei=utf-8"
@@ -26,8 +32,8 @@ class NewsSearchTool(BaseTool):
 
 def get_news_analysis_agent():
     return Agent(
-        name="NewsAnalysisAgent",
-        instructions="""あなたはプロの金融ニュースアナリストです。
+        model="gemini-2.0-flash-001", name="NewsAnalysisAgent",
+        instruction="""あなたはプロの金融ニュースアナリストです。
 最新のニュース見出しを収集し、それが日経平均株価に対してポジティブ（強気）かネガティブ（弱気）かを分析してください。
 ニュースの内容から市場のセンチメントを読み解き報告してください。""",
         tools=[NewsSearchTool()]
