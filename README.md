@@ -19,6 +19,20 @@ Python (FastAPI) と React (Vite + Tailwind CSS) が動作する、最小限の 
    - **バックエンド API**: [http://localhost:8000](http://localhost:8000)
    - **API ドキュメント (Swagger)**: [http://localhost:8000/docs](http://localhost:8000/docs)
 
+### 💻 CLI 実行方法
+
+WebUIを経由せずに、バックエンドコンテナ内でエージェントを直接実行することができます。
+
+```bash
+docker compose exec backend python -m cli_run
+```
+
+カスタムプロンプトを指定する場合：
+
+```bash
+docker compose exec backend python -m cli_run --prompt "明日の日経平均の動向を、特に半導体株に注目して分析してください。"
+```
+
 ---
 
 ## 🛠 技術構成

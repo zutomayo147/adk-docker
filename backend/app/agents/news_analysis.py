@@ -1,8 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
-from google_adk import Agent, Session, Tool
+from google.adk import Agent, Runner
+from google.adk.tools import BaseTool
 
-class NewsSearchTool(Tool):
+class NewsSearchTool(BaseTool):
     """株価に影響を与えるニュースを検索・取得するツール"""
     def execute(self, query: str = "日経平均 株価 ニュース"):
         # 簡易的なニュースサイトスクレイピング (例としてYahoo ニュース等の見出し)

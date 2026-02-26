@@ -1,7 +1,8 @@
 import yfinance as ticker
-from google_adk import Agent, Session, Tool
+from google.adk import Agent, Runner
+from google.adk.tools import BaseTool
 
-class MarketDataTool(Tool):
+class MarketDataTool(BaseTool):
     """日経平均株価や関連指数のデータを取得するツール"""
     def execute(self, symbol: str = "^N225"):
         data = ticker.download(symbol, period="5d", interval="1d")

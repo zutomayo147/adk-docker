@@ -1,4 +1,4 @@
-from google_adk import Agent
+from google.adk import Agent
 
 def get_chief_predictor_agent():
     return Agent(

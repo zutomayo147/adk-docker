@@ -8,5 +8,4 @@ coverage/
 __pycache__/
 *.log
 .env
-*.json
 my-key.json

@@ -1,8 +1,9 @@
 import yfinance as ticker
 import pandas as pd
-from google_adk import Agent, Tool
+from google.adk import Agent, Runner
+from google.adk.tools import BaseTool
 
-class TechnicalAnalysisTool(Tool):
+class TechnicalAnalysisTool(BaseTool):
     """テクニカル指標を計算するツール"""
     def execute(self, symbol: str = "^N225"):
         data = ticker.download(symbol, period="1mo", interval="1d")
