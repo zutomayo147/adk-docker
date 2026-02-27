@@ -6,10 +6,11 @@ from app.agents.news_analysis import get_news_analysis_agent
 from app.agents.technical_analysis import get_technical_analysis_agent
 from app.agents.economic_sentiment import get_economic_sentiment_agent
 from app.agents.chief_predictor import get_chief_predictor_agent
-from app.runner import run_agent_task
+from app.runner import run_agent_task, run_agent_task_stream
 from google.adk.sessions import InMemorySessionService
 from app.auth import setup_google_credentials
 import json
+
 
 # Initialize Google Cloud Credentials
 setup_google_credentials()
@@ -112,7 +113,7 @@ async def websocket_predict(websocket: WebSocket):
             "EconomicSentiment": "現在の世界経済状況と日経平均への影響をマクロ視点で分析して",
         }
 
-        # 各専門エージェントを順次実行し、ステータスを送信
+        # 各専門エージェントを順次実行し、ステータスをストリーミング送信
         for agent_name, agent in agents.items():
             await websocket.send_json(WSStatus(
                 agent=agent_name,
@@ -120,7 +121,20 @@ async def websocket_predict(websocket: WebSocket):
                 message=f"{agent_name}エージェントが分析を開始しました..."
             ).model_dump())
 
-            report_text = run_agent_task(agent, prompts[agent_name], session_service)
+            report_text = ""
+            async for event in run_agent_task_stream(agent, prompts[agent_name], session_service):
+                if event["type"] == "tool_call":
+                    await websocket.send_json(WSStatus(
+                        agent=agent_name,
+                        status="running",
+                        message=f"ツール実行中: {event['name']}({event['args']})"
+                    ).model_dump())
+                elif event["type"] == "content":
+                    # ストリーミング中のコンテンツ（必要なら前端に送れるが、今はステータス重視）
+                    pass
+                elif event["type"] == "final_text":
+                    report_text = event["text"]
+
             reports.append(AgentReport(agent=agent_name, report=report_text))
 
             await websocket.send_json(WSStatus(
@@ -153,6 +167,7 @@ async def websocket_predict(websocket: WebSocket):
 [経済センチメント]
 {next(r.report for r in reports if r.agent == "EconomicSentiment")}
 """
+        # 部長もストリーミング可能だが、一旦シンプルに
         final_prediction_text = run_agent_task(chief_agent, final_input, session_service)
 
         # 最終結果を送信
