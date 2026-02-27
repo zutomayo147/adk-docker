@@ -1,12 +1,14 @@
+# Dependencies / build artifacts
 **/node_modules/
 **/.next/
 **/dist/
 **/build/
 **/out/
 **/coverage/
-**/.venv/
+**/.git/
 **/__pycache__/
-*.log
-*.json
-my-key.json
-.env
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+**/.DS_Store
+backend/keys/
