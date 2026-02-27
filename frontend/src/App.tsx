@@ -58,6 +58,10 @@ function App() {
               : step,
           ),
         );
+      } else if (data.type === "partial") {
+        setPrediction((prev) =>
+          prev === null ? data.content : prev + data.content,
+        );
       } else if (data.type === "result") {
         setPrediction(data.prediction);
         setReports(data.agent_reports);

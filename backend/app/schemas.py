@@ -31,3 +31,9 @@ class WSResponse(BaseModel):
     type: str = "result"
     prediction: str
     agent_reports: List[AgentReport]
+
+
+class WSPartialResult(BaseModel):
+    type: str = "partial"
+    agent: str
+    content: str

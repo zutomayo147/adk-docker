@@ -1,6 +1,6 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from app.schemas import AgentReport, MessageResponse, PredictionRequest, PredictionResponse, WSStatus, WSResponse
+from app.schemas import AgentReport, MessageResponse, PredictionRequest, PredictionResponse, WSStatus, WSResponse, WSPartialResult
 from app.agents.market_data import get_market_data_agent
 from app.agents.news_analysis import get_news_analysis_agent
 from app.agents.technical_analysis import get_technical_analysis_agent
@@ -167,10 +167,25 @@ async def websocket_predict(websocket: WebSocket):
 [経済センチメント]
 {next(r.report for r in reports if r.agent == "EconomicSentiment")}
 """
-        # 部長もストリーミング可能だが、一旦シンプルに
-        final_prediction_text = run_agent_task(chief_agent, final_input, session_service)
+        final_prediction_text = ""
+        async for event in run_agent_task_stream(chief_agent, final_input, session_service):
+            if event["type"] == "tool_call":
+                await websocket.send_json(WSStatus(
+                    agent="ChiefPredictor",
+                    status="running",
+                    message=f"ツール実行中: {event['name']}({event['args']})"
+                ).model_dump())
+            elif event["type"] == "content":
+                final_prediction_text += event["text"]
+                await websocket.send_json(WSPartialResult(
+                    agent="ChiefPredictor",
+                    content=event["text"]
+                ).model_dump())
+            elif event["type"] == "final_text":
+                # すでにcontentで構築済み
+                pass
 
-        # 最終結果を送信
+        # 最終結果を送信（互換性のために最後に全体も送る）
         await websocket.send_json(WSResponse(
             prediction=final_prediction_text,
             agent_reports=reports
