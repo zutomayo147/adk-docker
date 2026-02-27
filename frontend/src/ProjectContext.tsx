@@ -2,78 +2,66 @@ import React from "react";
 
 const ProjectContext: React.FC = () => {
   return (
-    <div className="w-72 border-l border-slate-800 flex flex-col h-screen sticky top-0 bg-[#0B0F17]">
-      <div className="p-6 border-b border-slate-800 flex items-center justify-between">
-        <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+    <div className="w-[300px] flex-shrink-0 border-l border-[#1E293B] flex flex-col h-full overflow-hidden bg-[#0F172A]/50 backdrop-blur-sm z-10">
+      <div className="p-5 border-b border-[#1E293B] bg-[#0F172A]">
+        <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">
           Project Context
         </h3>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-6 space-y-8">
-        <div className="bg-[#1E293B]/40 border border-slate-800 rounded-xl p-5 shadow-sm">
-          <div className="flex items-center gap-2 mb-4">
+      <div className="flex-1 overflow-y-auto p-5 space-y-5">
+        {/* Saved Snippets */}
+        <div className="bg-[#151D2C] border border-[#1E293B] rounded-xl overflow-hidden shadow-sm">
+          <div className="px-4 py-3 bg-[#151D2C] border-b border-slate-800/50 flex items-center gap-2">
             <svg
-              className="w-4 h-4 text-blue-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+              className="w-3.5 h-3.5 text-blue-500"
+              fill="currentColor"
+              viewBox="0 0 20 20"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
-              ></path>
+              <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path>
             </svg>
-            <h4 className="text-xs font-bold text-white uppercase tracking-tight">
+            <h4 className="text-[11px] font-bold text-slate-200">
               Saved Snippets (4)
             </h4>
           </div>
-          <div className="space-y-3">
-            <div className="bg-[#0B0F17] border border-slate-800 rounded-lg p-3 text-[11px] text-slate-400 italic leading-relaxed">
+          <div className="p-2.5 space-y-2">
+            <div className="bg-[#0B1120] border border-slate-800 rounded-lg p-3 text-[11.5px] text-slate-400 italic font-serif leading-relaxed shadow-inner">
               "...L5 autonomy in Class 8 trucks requires a minimum sensor
               redundanc..."
             </div>
-            <div className="bg-[#0B0F17] border border-slate-800 rounded-lg p-3 text-[11px] text-slate-400 italic leading-relaxed">
+            <div className="bg-[#0B1120] border border-slate-800 rounded-lg p-3 text-[11.5px] text-slate-400 italic font-serif leading-relaxed shadow-inner">
               "SEC Form 10-K for Aurora Innovation highlights cash runway until
               Q4 2025."
             </div>
           </div>
-          <button className="w-full mt-4 text-[10px] font-bold text-blue-500 hover:text-blue-400 transition-colors uppercase tracking-widest text-center">
-            View All Research Clips
-          </button>
+          <div className="px-4 py-3 text-center border-t border-slate-800/30">
+            <button className="text-[10px] font-bold text-blue-500 hover:text-blue-400 transition-colors uppercase tracking-widest leading-none">
+              View All Research Clips
+            </button>
+          </div>
         </div>
 
-        <div className="bg-[#1E293B]/40 border border-slate-800 rounded-xl p-5 shadow-sm">
+        {/* Market Sentiment */}
+        <div className="bg-[#151D2C] border border-[#1E293B] rounded-xl p-4 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
             <svg
-              className="w-4 h-4 text-blue-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+              className="w-3.5 h-3.5 text-blue-500"
+              fill="currentColor"
+              viewBox="0 0 20 20"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"
-              ></path>
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"
-              ></path>
+              <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+              <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
             </svg>
-            <h4 className="text-xs font-bold text-white uppercase tracking-tight">
+            <h4 className="text-[11px] font-bold text-slate-200">
               Market Sentiment
             </h4>
           </div>
-          <div className="space-y-4">
-            <div className="flex gap-1 h-2">
-              <div className="flex-[4] bg-green-500 rounded-full shadow-lg shadow-green-500/20"></div>
-              <div className="flex-[3] bg-orange-400 rounded-full shadow-lg shadow-orange-500/10"></div>
-              <div className="flex-[1] bg-red-500 rounded-full shadow-lg shadow-red-500/10"></div>
+
+          <div className="space-y-2">
+            <div className="flex gap-1.5 h-2">
+              <div className="flex-[4] bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.3)]"></div>
+              <div className="flex-[3] bg-amber-400 rounded-full shadow-[0_0_8px_rgba(251,191,36,0.2)]"></div>
+              <div className="flex-[1] bg-rose-500 rounded-full shadow-[0_0_8px_rgba(244,63,94,0.2)]"></div>
             </div>
             <div className="flex justify-between text-[8px] font-bold text-slate-500 uppercase tracking-widest">
               <span>Bullish</span>
@@ -83,10 +71,11 @@ const ProjectContext: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-[#1E293B]/40 border border-slate-800 rounded-xl p-5 shadow-sm">
+        {/* Live Citations */}
+        <div className="bg-[#151D2C] border border-[#1E293B] rounded-xl p-4 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
             <svg
-              className="w-4 h-4 text-blue-400"
+              className="w-3.5 h-3.5 text-blue-500"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -94,11 +83,11 @@ const ProjectContext: React.FC = () => {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
+                strokeWidth="2.5"
                 d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
               ></path>
             </svg>
-            <h4 className="text-xs font-bold text-white uppercase tracking-tight">
+            <h4 className="text-[11px] font-bold text-slate-200">
               Live Citations
             </h4>
           </div>
@@ -116,14 +105,14 @@ const ProjectContext: React.FC = () => {
               },
             ].map((cite) => (
               <div key={cite.id} className="flex gap-3">
-                <span className="w-5 h-5 bg-slate-800 rounded flex items-center justify-center text-[10px] font-bold text-slate-400 border border-slate-700">
+                <span className="shrink-0 w-5 h-5 bg-[#0B1120] rounded-[4px] flex items-center justify-center text-[10px] font-bold text-slate-400 border border-slate-700/50 shadow-inner">
                   {cite.id}
                 </span>
-                <div>
-                  <h5 className="text-[11px] font-bold text-blue-400 hover:underline cursor-pointer">
+                <div className="pt-0.5">
+                  <h5 className="text-[11.5px] font-bold text-blue-400 hover:text-blue-300 transition-colors cursor-pointer leading-tight mb-0.5 tracking-tight">
                     {cite.title}
                   </h5>
-                  <p className="text-[9px] text-slate-500 font-medium">
+                  <p className="text-[9.5px] text-slate-500 font-medium">
                     {cite.desc}
                   </p>
                 </div>
