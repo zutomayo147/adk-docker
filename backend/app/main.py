@@ -86,9 +86,13 @@ async def predict_nikkei(request: PredictionRequest):
 async def websocket_predict(websocket: WebSocket):
     await websocket.accept()
     try:
-        # クライアントからのリクエスト待機（現状は固定クエリを想定するが受け取る仕組みを用意）
+        # クライアントからのリクエスト待機
         data = await websocket.receive_text()
-        # request_data = json.loads(data) # 必要に応じてクエリを取得
+        try:
+            request_data = json.loads(data)
+            custom_prompt = request_data.get("query", "明日の日経平均株価の予測をお願いします。")
+        except json.JSONDecodeError:
+            custom_prompt = "明日の日経平均株価の予測をお願いします。"
 
         # エージェントの初期化
         agents = {
@@ -133,6 +137,8 @@ async def websocket_predict(websocket: WebSocket):
         ).model_dump())
 
         final_input = f"""
+{custom_prompt}
+
 以下の部下からの報告を元に、最終的な予測を作成してください。
 
 [市場データ]
