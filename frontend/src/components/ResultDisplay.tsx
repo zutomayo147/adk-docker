@@ -1,6 +1,6 @@
 import React from "react";
 import ThinkingProcess, { type Step } from "../ThinkingProcess";
-import { Report } from "../hooks/usePredict";
+import type { Report } from "../hooks/usePredict";
 
 interface ResultDisplayProps {
   isSearching: boolean;

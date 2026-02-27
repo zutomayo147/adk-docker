@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { type Step } from "../ThinkingProcess";
+import type { Step } from "../ThinkingProcess";
 
 export interface Report {
   agent: string;
