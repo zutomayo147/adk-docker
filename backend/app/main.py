@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.schemas import MessageResponse
@@ -8,15 +10,22 @@ from app.routers import predict
 # Initialize Google Cloud Credentials
 setup_google_credentials()
 
-app = FastAPI(title="ADK Docker Backend API")
+# Disable interactive API docs in production
+_enable_docs = os.getenv("ENABLE_DOCS", "false").lower() in ("true", "1", "yes")
+
+app = FastAPI(
+    title="ADK Docker Backend API",
+    docs_url="/docs" if _enable_docs else None,
+    redoc_url="/redoc" if _enable_docs else None,
+)
 
 # CORS settings
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 
 # Include routers

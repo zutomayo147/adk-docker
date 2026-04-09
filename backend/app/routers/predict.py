@@ -1,3 +1,6 @@
+import json
+import logging
+
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from app.schemas import AgentReport, PredictionRequest, PredictionResponse, WSStatus, WSResponse, WSPartialResult
 from app.agents.market_data import get_market_data_agent
@@ -7,7 +10,8 @@ from app.agents.economic_sentiment import get_economic_sentiment_agent
 from app.agents.chief_predictor import get_chief_predictor_agent
 from app.runner import run_agent_task, run_agent_task_stream
 from google.adk.sessions import InMemorySessionService
-import json
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -151,8 +155,9 @@ async def websocket_predict(websocket: WebSocket):
         ).model_dump())
 
     except WebSocketDisconnect:
-        print("WebSocket disconnected")
+        logger.info("WebSocket disconnected")
     except Exception as e:
-        await websocket.send_json({"type": "error", "message": str(e)})
+        logger.exception("Unexpected error during WebSocket predict")
+        await websocket.send_json({"type": "error", "message": "An internal error occurred. Please try again later."})
     finally:
         await websocket.close()
