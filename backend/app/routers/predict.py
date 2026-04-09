@@ -60,9 +60,34 @@ async def websocket_predict(websocket: WebSocket):
         data = await websocket.receive_text()
         try:
             request_data = json.loads(data)
-            custom_prompt = request_data.get("query", "明日の日経平均株価の予測をお願いします。")
         except json.JSONDecodeError:
-            custom_prompt = "明日の日経平均株価の予測をお願いします。"
+            await websocket.send_json({
+                "type": "error",
+                "message": "Invalid JSON format. Please send a valid JSON object with a 'query' field."
+            })
+            return
+
+        if not isinstance(request_data, dict):
+            await websocket.send_json({
+                "type": "error",
+                "message": "Invalid request format. Expected a JSON object."
+            })
+            return
+
+        if "query" not in request_data:
+            await websocket.send_json({
+                "type": "error",
+                "message": "Missing required field: 'query'."
+            })
+            return
+
+        custom_prompt = request_data["query"]
+        if not isinstance(custom_prompt, str) or not custom_prompt.strip():
+            await websocket.send_json({
+                "type": "error",
+                "message": "The 'query' field must be a non-empty string."
+            })
+            return
 
         agents = {
             "MarketData": get_market_data_agent(),
