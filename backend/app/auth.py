@@ -1,7 +1,11 @@
-import os
+import atexit
 import json
+import logging
+import os
 import tempfile
 from typing import Optional
+
+logger = logging.getLogger(__name__)
 
 def setup_google_credentials() -> Optional[str]:
     """
@@ -21,6 +25,7 @@ def setup_google_credentials() -> Optional[str]:
             json.dump(json_data, temp_file)
             temp_file.close()
             os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = temp_file.name
+            atexit.register(lambda path=temp_file.name: os.unlink(path) if os.path.exists(path) else None)
             return temp_file.name
         except json.JSONDecodeError:
             # JSONでない場合は、ファイルパスとして試行
@@ -30,7 +35,7 @@ def setup_google_credentials() -> Optional[str]:
                 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = full_path
                 return full_path
             else:
-                print(f"Warning: GOOGLE_SERVICE_ACCOUNT_JSON is neither valid JSON nor an existing path: {service_account_val}")
+                logger.warning("GOOGLE_SERVICE_ACCOUNT_JSON is neither valid JSON nor an existing file path.")
     
     # 2. 既存のファイルパスのチェック
     credentials_path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")

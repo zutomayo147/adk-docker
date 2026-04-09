@@ -117,7 +117,7 @@ const ThinkingProcess: React.FC<ThinkingProcessProps> = ({
                 {step.status === "running" && (
                   <div className="mt-3 overflow-hidden">
                     <div className="flex gap-1 h-[2px] w-full">
-                      <div className="h-full bg-blue-500 rounded-full animate-[loading_1.5s_infinite] w-1/3 shadow-[0_0_8px_rgba(59,130,246,0.6)]"></div>
+                      <div className="h-full bg-blue-500 rounded-full animate-loading w-1/3 shadow-[0_0_8px_rgba(59,130,246,0.6)]"></div>
                     </div>
                   </div>
                 )}
@@ -126,17 +126,6 @@ const ThinkingProcess: React.FC<ThinkingProcessProps> = ({
           ))}
         </div>
       </div>
-
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-        @keyframes loading {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(300%); }
-        }
-      `,
-        }}
-      />
 
       {isThinking && (
         <div className="relative h-10 bg-gradient-to-t from-[#0B1120] to-transparent border-t border-slate-800/50 flex items-center justify-center pb-2 pt-2">
